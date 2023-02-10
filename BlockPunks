@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "../tokens/nf-token-metadata.sol";
-import "../tokens/nf-token-enumerable.sol";
-import "../ownership/ownable.sol";
-
+import "https://github.com/nibbstack/erc721/blob/master/src/contracts/tokens/nf-token-metadata.sol";
+import "https://github.com/nibbstack/erc721/blob/master/src/contracts/tokens/nf-token-enumerable.sol";
+import "https://github.com/nibbstack/erc721/blob/master/src/contracts/ownership/ownable.sol";
 /**
  * @dev This is an example contract implementation of NFToken with enumerable and metadata
  * extensions.
@@ -15,7 +14,7 @@ contract BlockPunks is
   Ownable
 {
 
-   
+  uint256 public immutable MaxSupply;
 
   /**
    * @dev Contract constructor.
@@ -25,12 +24,12 @@ contract BlockPunks is
   constructor(
     string memory _name,
     string memory _symbol,
-    string memory _MaxSupply
+    uint256 MaxSupply_
   )
   {
     nftName = _name;
     nftSymbol = _symbol;
-    nftMaxSupply= _MaxSupply;
+    MaxSupply= MaxSupply_;
   }
 
   /**
@@ -47,7 +46,7 @@ contract BlockPunks is
     external
     onlyOwner
   {
-    require(tokens.length() < MAX_SUPPLY, "Can't mint anymore tokens.");
+    require(tokens.length < MaxSupply, "Can't mint anymore tokens.");
 
     super._mint(_to, _tokenId);
     super._setTokenUri(_tokenId, _uri);
@@ -57,7 +56,7 @@ contract BlockPunks is
    * @dev Removes a NFT from owner.
    * @param _tokenId Which NFT we want to remove.
    */
-  function burnOnlyTokenOwner(    uint256 _tokenId
+  function burn(    uint256 _tokenId
   )
     external
     onlyOwner
